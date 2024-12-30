@@ -1,18 +1,54 @@
 import os
 import speech_recognition as sr
-import pyttsx3
 from playsound import playsound
+from elevenlabs import generate_audio, save_audio, set_api_key, play_audio
 from apis.weather_api import WeatherAPI
 from apis.news_api import NewsAPI
 from core.assistant_core import AegisCore
+from difflib import SequenceMatcher
 
-# Initialize TTS Engine
+# Set your ElevenLabs API key
+set_api_key("sk_bcc549fd3c2f3f60569f0c8bfbe2ba64654d05cfc736ab1b")  # Replace with your ElevenLabs API key
+
+# Initialize TTS Engine (backup for debugging if ElevenLabs fails)
+import pyttsx3
 engine = pyttsx3.init()
 
+
+def is_exit_query(query):
+    """Check if the query is an exit command."""
+    exit_keywords = ["exit", "quit", "bye", "goodbye", "see you", "stop", "end"]
+    for keyword in exit_keywords:
+        if keyword in query:
+            return True
+        if SequenceMatcher(None, query, keyword).ratio() > 0.8:  # Fuzzy matching
+            return True
+    return False
+
+from elevenlabs import generate, set_api_key, play
+
+# Set your ElevenLabs API Key
+set_api_key("sk_bcc549fd3c2f3f60569f0c8bfbe2ba64654d05cfc736ab1b")  # Replace with your Eleven Labs API key
+
+# Replace "your_voice_id_here" with the Voice ID of your generated voice
+VOICE_ID = "RxFIFCtVGjv2e5nqfYP8"
+
 def speak(text):
-    """Speak the provided text."""
-    engine.say(text)
-    engine.runAndWait()
+    """Speak the provided text using Eleven Labs API."""
+    try:
+        # Generate the audio using the Eleven Labs voice
+        audio = generate(
+            text=text,
+            voice=VOICE_ID,
+            model="eleven_monolingual_v1"
+        )
+        # Play the audio
+        play(audio)
+    except Exception as e:
+        print(f"Error using Eleven Labs voice: {e}")
+
+
+
 
 def listen():
     """Capture audio input from the user."""
@@ -31,11 +67,12 @@ def listen():
         except Exception as e:
             return str(e)
 
+
 def main():
     print("Starting Aegis Personal Assistant...")
 
     # Play greeting MP3
-    greeting_path = "C:/path_to_your_mp3_file/greeting.mp3"  # Replace with the local path
+    greeting_path = "Music\Jarvismp3.mp3"  # Replace with the local path
     playsound(greeting_path)
 
     # Initial Greeting
@@ -51,7 +88,7 @@ def main():
             print("Speak your query or type it:")
             query = listen() or input("You: ").strip().lower()
 
-            if query in ["exit", "quit", "bye"]:
+            if is_exit_query(query):  # Improved exit query detection
                 speak("Goodbye! Have a great day!")
                 print("Goodbye! Have a great day!")
                 break
@@ -113,6 +150,7 @@ def main():
         except Exception as e:
             speak("An error occurred. Please try again.")
             print(f"An error occurred: {str(e)}")
+
 
 if __name__ == "__main__":
     main()
