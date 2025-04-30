@@ -28,7 +28,7 @@ def is_exit_query(query):
 from elevenlabs import generate, set_api_key, play
 
 # Set your ElevenLabs API Key
-set_api_key("sk_bcc549fd3c2f3f60569f0c8bfbe2ba64654d05cfc736ab1b")  # Replace with your Eleven Labs API key
+set_api_key("")  # Replace with your Eleven Labs API key
 
 # Replace "your_voice_id_here" with the Voice ID of your generated voice
 VOICE_ID = "RxFIFCtVGjv2e5nqfYP8"
