@@ -8,7 +8,7 @@ from core.assistant_core import AegisCore
 from difflib import SequenceMatcher
 
 # Set your ElevenLabs API key
-set_api_key("sk_bcc549fd3c2f3f60569f0c8bfbe2ba64654d05cfc736ab1b")  # Replace with your ElevenLabs API key
+set_api_key("")  # Replace with your ElevenLabs API key
 
 # Initialize TTS Engine (backup for debugging if ElevenLabs fails)
 import pyttsx3
