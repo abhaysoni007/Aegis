@@ -2,7 +2,7 @@ import requests
 import json
 
 class NewsAPI:
-    def __init__(self, api_key="c0ee60f779e142d3a29d1e06c3e9b123"):
+    def __init__(self, api_key=""):
         self.base_url = "https://newsapi.org/v2/top-headlines"
         self.api_key = api_key
 
